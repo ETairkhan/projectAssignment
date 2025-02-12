@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .chart-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap:wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 40px; /* Adds space between charts */
+            height: auto;
+            margin-bottom: 50px;
+        }
+        canvas {
+            max-width: 600px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <h2 class="text-center" >Expense Report</h2>
+
+    <div class="chart-container">
+        <h4>Expense Distribution (Pie Chart)</h4>
+        <canvas id="expensePieChart"></canvas>
+
+        <h4>Expense Comparison (Bar Chart)</h4>
+        <canvas id="expenseBarChart"></canvas>
+
+        <h4>Expense Trends Over Time (Line Chart)</h4>
+        <canvas id="expenseLineChart"></canvas>
+    </div>
+
+    <!-- Store JSON Data -->
+    <script type="application/json" id="categories">{{ categories | tojson }}</script>
+    <script type="application/json" id="amounts">{{ amounts | tojson }}</script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var ctxPie = document.getElementById("expensePieChart").getContext("2d");
+            var ctxBar = document.getElementById("expenseBarChart").getContext("2d");
+            var ctxLine = document.getElementById("expenseLineChart").getContext("2d");
+
+            var categories = JSON.parse(document.getElementById("categories").textContent);
+            var amounts = JSON.parse(document.getElementById("amounts").textContent);
+
+            // Pie Chart (Expense Distribution)
+            new Chart(ctxPie, {
+                type: "pie",
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data: amounts,
+                        backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#66ff66", "#9966ff"],
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Expense Distribution' }
+                    }
+                }
+            });
+
+            // Bar Chart (Expense Comparison)
+            new Chart(ctxBar, {
+                type: "bar",
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: "Amount Spent ($)",
+                        data: amounts,
+                        backgroundColor: ["#ff6384", "#36a2eb", "#ffce56", "#66ff66", "#9966ff"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Line Chart (Expense Trends Over Time)
+            new Chart(ctxLine, {
+                type: "line",
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: "Expense Trend",
+                        data: amounts,
+                        fill: false,
+                        borderColor: "#36a2eb",
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+body {
+   background-color: #f8f9fa;
+   font-family: 'Arial', sans-serif;
+}
+
+.container {
+   max-width: 800px;
+}
+
+h2 {
+   color: #343a40;
+   font-weight: bold;
+}
+
+.table {
+   background: white;
+   border-radius: 8px;
+   overflow: hidden;
+   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+   padding: 12px;
+   text-align: left;
+}
+
+.btn {
+   margin: 5px;
+}
+
+.form-control {
+   margin-bottom: 10px;
+}
